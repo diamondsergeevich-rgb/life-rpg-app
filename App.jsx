@@ -29,12 +29,7 @@ const LEVELS = [
   { name: "Founder Mode", xp: 2000 },
 ];
 
-const STAT_MAX = {
-  BODY: 35,
-  MONEY: 40,
-  MIND: 40,
-  STATUS: 15,
-};
+const STAT_MAX = { BODY: 35, MONEY: 40, MIND: 40, STATUS: 15 };
 
 function cx(...items) {
   return items.filter(Boolean).join(" ");
@@ -59,12 +54,7 @@ function getLevel(totalXp) {
   }
 
   const progress = next ? (safeXp - current.xp) / (next.xp - current.xp) : 1;
-
-  return {
-    current,
-    next,
-    progress: clamp(progress),
-  };
+  return { current, next, progress: clamp(progress) };
 }
 
 function Card({ children, className = "" }) {
@@ -91,7 +81,6 @@ function StatBar({ name, value, max }) {
         <span className="font-bold text-slate-300">{name}</span>
         <span className="text-slate-400">{value} XP</span>
       </div>
-
       <div className="h-2 overflow-hidden rounded-full bg-white/10">
         <motion.div
           className="h-full rounded-full bg-gradient-to-r from-violet-300 to-cyan-300"
@@ -125,13 +114,11 @@ export default function LifeRPGApp() {
 
   const statXp = useMemo(() => {
     const base = { BODY: 0, MONEY: 0, MIND: 0, STATUS: 0 };
-
     QUESTS.forEach((quest) => {
       if (done[quest.id] && Object.prototype.hasOwnProperty.call(base, quest.stat)) {
         base[quest.stat] += quest.xp;
       }
     });
-
     return base;
   }, [done]);
 
@@ -168,7 +155,6 @@ export default function LifeRPGApp() {
                   <h1 className="mt-1 text-3xl font-black tracking-tight">Builder Mode</h1>
                   <p className="mt-1 text-sm text-slate-300">День как квест. Прогресс как игра.</p>
                 </div>
-
                 <div className="rounded-2xl bg-cyan-400/20 px-3 py-2 text-right">
                   <p className="text-xs text-cyan-100">Streak</p>
                   <p className="text-xl font-black">🔥 {streak}</p>
@@ -181,7 +167,6 @@ export default function LifeRPGApp() {
                     <p className="text-sm text-slate-400">Level</p>
                     <p className="text-2xl font-black">{level.current.name}</p>
                   </div>
-
                   <div className="text-right">
                     <p className="text-sm text-slate-400">Total XP</p>
                     <p className="text-2xl font-black text-cyan-200">{totalXp}</p>
@@ -219,13 +204,7 @@ export default function LifeRPGApp() {
                 <h2 className="text-lg font-black">Daily Quests</h2>
                 <p className="text-xs text-slate-400">Отмечай выполненное и фарми XP</p>
               </div>
-
-              <button
-                type="button"
-                onClick={resetDay}
-                className="rounded-2xl p-3 text-slate-300 transition hover:bg-white/10 hover:text-white"
-                aria-label="Reset day"
-              >
+              <button type="button" onClick={resetDay} className="rounded-2xl p-3 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Reset day">
                 ↺
               </button>
             </div>
@@ -233,26 +212,20 @@ export default function LifeRPGApp() {
             <div className="space-y-2">
               {QUESTS.map((quest) => {
                 const active = Boolean(done[quest.id]);
-
                 return (
                   <button
                     type="button"
                     key={quest.id}
                     onClick={() => setDone((current) => ({ ...current, [quest.id]: !current[quest.id] }))}
-                    className={cx(
-                      "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition",
-                      active ? "border-emerald-300/30 bg-emerald-400/20" : "border-white/10 bg-black/20 hover:bg-white/10"
-                    )}
+                    className={cx("flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition", active ? "border-emerald-300/30 bg-emerald-400/20" : "border-white/10 bg-black/20 hover:bg-white/10")}
                   >
                     <span className={cx("grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-xl", active ? "bg-emerald-300/20" : "bg-white/10")}>
                       {active ? "✅" : quest.icon}
                     </span>
-
                     <span className="min-w-0 flex-1">
                       <span className="block font-bold leading-tight">{quest.title}</span>
                       <span className="block text-xs text-slate-400">{quest.stat}</span>
                     </span>
-
                     <span className="shrink-0 text-right font-black text-cyan-200">+{quest.xp}</span>
                   </button>
                 );
@@ -265,20 +238,15 @@ export default function LifeRPGApp() {
           <div className="p-4">
             <h2 className="text-lg font-black">Bosses</h2>
             <p className="mb-3 text-xs text-slate-400">Отметь, если враг сегодня тебя пробил</p>
-
             <div className="grid grid-cols-2 gap-2">
               {BOSSES.map((boss) => {
                 const active = Boolean(bosses[boss.id]);
-
                 return (
                   <button
                     type="button"
                     key={boss.id}
                     onClick={() => setBosses((current) => ({ ...current, [boss.id]: !current[boss.id] }))}
-                    className={cx(
-                      "rounded-2xl border p-3 text-left transition",
-                      active ? "border-red-300/40 bg-red-400/20" : "border-white/10 bg-black/20 hover:bg-white/10"
-                    )}
+                    className={cx("rounded-2xl border p-3 text-left transition", active ? "border-red-300/40 bg-red-400/20" : "border-white/10 bg-black/20 hover:bg-white/10")}
                   >
                     <span className="block text-sm font-bold">{boss.title}</span>
                     <span className="block text-xs text-red-100">-{boss.penalty} XP</span>
@@ -306,13 +274,7 @@ export default function LifeRPGApp() {
             <h2 className="mb-3 text-lg font-black">Achievements</h2>
             <div className="grid grid-cols-2 gap-2">
               {badges.map((badge) => (
-                <div
-                  key={badge.label}
-                  className={cx(
-                    "rounded-2xl border p-3 transition",
-                    badge.active ? "border-yellow-200/30 bg-yellow-300/20" : "border-white/10 bg-black/20 opacity-50"
-                  )}
-                >
+                <div key={badge.label} className={cx("rounded-2xl border p-3 transition", badge.active ? "border-yellow-200/30 bg-yellow-300/20" : "border-white/10 bg-black/20 opacity-50")}>
                   <div className="mb-2 text-xl">{badge.icon}</div>
                   <p className="text-sm font-bold">{badge.label}</p>
                 </div>
@@ -321,11 +283,7 @@ export default function LifeRPGApp() {
           </div>
         </Card>
 
-        <button
-          type="button"
-          onClick={saveDay}
-          className="h-14 w-full rounded-3xl bg-gradient-to-r from-cyan-400 to-emerald-300 text-base font-black text-slate-950 shadow-xl shadow-cyan-500/10 transition active:scale-[0.98]"
-        >
+        <button type="button" onClick={saveDay} className="h-14 w-full rounded-3xl bg-gradient-to-r from-cyan-400 to-emerald-300 text-base font-black text-slate-950 shadow-xl shadow-cyan-500/10 transition active:scale-[0.98]">
           Завершить день · Save XP
         </button>
       </div>
